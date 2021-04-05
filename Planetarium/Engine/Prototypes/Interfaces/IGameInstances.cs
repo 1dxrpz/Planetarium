@@ -14,5 +14,7 @@ namespace GameEngineTK.Engine.Prototypes.Interfaces
 		public string name { get; set; }
 		public void Draw();
 		public void init();
+		public void MoveTo(int index);
+		public void MoveToLayer(Layer layer);
 	}
 }

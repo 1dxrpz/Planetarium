@@ -20,7 +20,6 @@ namespace GameEngineTK.Engine.Utils
 		}
 		void ConsoleExecutor()
 		{
-			Console.Clear();
 			foreach (var i in Theatre.Scenes)
 			{
 				Console.WriteLine($"- > [{i.GetType().Name}] {i.name}");

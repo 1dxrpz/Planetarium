@@ -22,47 +22,48 @@ namespace GameEngineTK.Scripts
 	public class PlayerScript : IScriptManager
 	{
 		public static GameObject Planet;
-		public static GameObject Nebula;
-		
-		TextureHandler planet = new TextureHandler(@"\Planetarium\Content\buffered.png");
-		TextureHandler nebula = new TextureHandler(@"\Planetarium\Content\nebula.png");
+		public GameObject bg;
 
+		TextureHandler planet = new TextureHandler(@"\Planetarium\Content\buffered.png");
+		GameObject[] gameObjects;
 		public void Start()
 		{
+			gameObjects = new GameObject[1000];
+			for (int i = 0; i < 100; i++)
+			{
+				gameObjects[i] = new GameObject();
+				
+			}
+
+			Layer background = new Layer("bg");
+			Color[] data = new Color[1] { new Color(12, 37, 53) };
+			Texture2D texture = new Texture2D(ScriptManager.graphicsDevice, 1, 1);
+			texture.SetData(data);
+			bg = new GameObject();
+
+			background.Add(bg);
+
+			bg.AddComponent(new Sprite());
+			bg.GetComponent<Sprite>().Texture = texture;
+			bg.GetComponent<Transform>().Width = 1000;
+			bg.GetComponent<Transform>().Height = 1000;
+
 			Planet = new GameObject();
 			Planet.AddComponent(new BufferedAnimatedSprite());
 			BufferedAnimation planetAn = Planet.GetComponent<BufferedAnimatedSprite>().animation;
 			planetAn.SpriteSheet = planet.ToTexture2D();
 
-			Nebula = new GameObject();
-			Nebula.AddComponent(new Sprite());
-			Sprite nebulaSp = Nebula.GetComponent<Sprite>();
-			nebulaSp.Texture = nebula.ToTexture2D();
-			Transform nebulaTr = Nebula.GetComponent<Transform>();
-			nebulaTr.Width = 130 * 10;
-			nebulaTr.Height = 126 * 10;
-			nebulaTr.Position = new Vector2(200, 200);
-
 			Planet.GetComponent<Transform>().Width = 280;
 			Planet.GetComponent<Transform>().Height = 280;
-
 
 			planetAn.FrameCount = 100;
 			planetAn.FrameSize = new Point(100, 100);
 			planetAn.AnimationSpeed = 1;
 			planetAn.FrameDepth = 10;
-			Planet.isVisible = VisibleState.Visible;
-			Nebula.isVisible = VisibleState.Visible;
-
-			Nebula.MoveTo(0);
 		}
 		public void Update()
 		{
-			ScriptManager.Services.GetService<Debug>().AddDebugLine("dt: " + Time.deltaTime);
-
-			/*
 			
-			*/
 		}
 	}
 }

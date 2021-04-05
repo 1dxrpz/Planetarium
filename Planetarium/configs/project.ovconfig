@@ -10,6 +10,6 @@ name: Planetarium Game
 version: v.1.01
 info: https://kennethgibson.site/
 title: Planetarium
-EnableConsole: true
+EnableConsole: false
 EnableDebug: true
 EnsureDefaults: true
