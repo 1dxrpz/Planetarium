@@ -22,31 +22,21 @@ namespace GameEngineTK.Scripts
 	public class PlayerScript : IScriptManager
 	{
 		public static GameObject Planet;
-		public GameObject bg;
 
 		TextureHandler planet = new TextureHandler(@"\Planetarium\Content\buffered.png");
-		GameObject[] gameObjects;
+		GameObject[] stars;
 		public void Start()
 		{
-			gameObjects = new GameObject[1000];
-			for (int i = 0; i < 100; i++)
+			stars = new GameObject[100];
+			for (int i = 0; i < 1000; i++)
 			{
-				gameObjects[i] = new GameObject();
-				
+				stars[i] = new GameObject();
 			}
 
 			Layer background = new Layer("bg");
 			Color[] data = new Color[1] { new Color(12, 37, 53) };
 			Texture2D texture = new Texture2D(ScriptManager.graphicsDevice, 1, 1);
 			texture.SetData(data);
-			bg = new GameObject();
-
-			background.Add(bg);
-
-			bg.AddComponent(new Sprite());
-			bg.GetComponent<Sprite>().Texture = texture;
-			bg.GetComponent<Transform>().Width = 1000;
-			bg.GetComponent<Transform>().Height = 1000;
 
 			Planet = new GameObject();
 			Planet.AddComponent(new BufferedAnimatedSprite());
@@ -60,6 +50,8 @@ namespace GameEngineTK.Scripts
 			planetAn.FrameSize = new Point(100, 100);
 			planetAn.AnimationSpeed = 1;
 			planetAn.FrameDepth = 10;
+
+			
 		}
 		public void Update()
 		{

@@ -85,6 +85,7 @@ namespace GameEngineTK
 
 			ctx = new SpriteBatch(GraphicsDevice);
 			font = Content.Load<SpriteFont>("font");
+			
 		}
 		public async void r()
 		{
@@ -96,20 +97,32 @@ namespace GameEngineTK
 				});
 			});
 		}
-		protected override void Update(GameTime gameTime)
+		bool test = true;
+		protected async override void Update(GameTime gameTime)
 		{
-			r();
-			
-			ProjectSettings settings = Services.GetService<ProjectSettings>();
+			await Task.Run(() => {
+				Program.scripts.ForEach(v =>
+				{
+					v.Update();
+				});
+				base.Update(gameTime);
+			});
 
-			_graphics.PreferredBackBufferHeight = settings.WindowHeight;
-			_graphics.PreferredBackBufferWidth = settings.WindowWidth;
-			_graphics.SynchronizeWithVerticalRetrace = settings.VSync;
-			base.IsFixedTimeStep = settings.FixedTS;
-			BoxCollider.RenderColisionMask = settings.ShowColliders;
-			TargetElapsedTime = TimeSpan.FromMilliseconds(1000 / settings.MaxFPS);
-			_graphics.ApplyChanges();
-			base.Update(gameTime);
+			if (test)
+			{
+				ProjectSettings settings = Services.GetService<ProjectSettings>();
+				_graphics.PreferredBackBufferHeight = settings.WindowHeight;
+				_graphics.PreferredBackBufferWidth = settings.WindowWidth;
+				_graphics.SynchronizeWithVerticalRetrace = settings.VSync;
+				BoxCollider.RenderColisionMask = settings.ShowColliders;
+				TargetElapsedTime = TimeSpan.FromMilliseconds(1000 / settings.MaxFPS);
+				base.IsFixedTimeStep = settings.FixedTS;
+				_graphics.ApplyChanges();
+				test = false;
+			}
+
+
+			
 		}
 		protected override void Draw(GameTime gameTime)
 		{
@@ -117,7 +130,7 @@ namespace GameEngineTK
 			
 			ProjectSettings settings = Services.GetService<ProjectSettings>();
 			Debug debug = Services.GetService<Debug>();
-			//GraphicsDevice.Clear(new Color(12, 37, 53));
+			GraphicsDevice.Clear(new Color(12, 37, 53));
 
 			debug.Update(gameTime);
 			Time.deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
