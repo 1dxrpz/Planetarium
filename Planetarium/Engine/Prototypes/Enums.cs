@@ -21,6 +21,14 @@ namespace GameEngineTK.Engine.Prototypes.Enums
 		Disabled,
 		Enabled
 	}
+	public enum Anchor
+	{
+		none,
+		Top,
+		Left,
+		Bottom,
+		Right
+	}
 }
 /*
  

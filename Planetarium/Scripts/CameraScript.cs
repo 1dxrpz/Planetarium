@@ -14,20 +14,19 @@ namespace GameEngineTK.Scripts
 	{
 		
 		Debug debug;
+		ProjectSettings settings;
+		Vector2 center;
+
 		public void Start()
 		{
-			
+			settings = ScriptManager.Services.GetService<ProjectSettings>();
+			center = new Vector2(settings.WindowWidth, settings.WindowHeight) / 2;
 		}
 		
 		public void Update()
 		{
-			ProjectSettings settings = ScriptManager.Services.GetService<ProjectSettings>();			
 			debug = ScriptManager.Services.GetService<Debug>();
 			debug.AddDebugLine($"FPS: {debug.FPS}");
-			Vector2 pos = new Vector2(50, 50);
-
-			Camera.Position = PlayerScript.Planet.GetComponent<Transform>().Position + new Vector2(settings.WindowWidth, settings.WindowHeight);
-
 		}
 	}
 }
