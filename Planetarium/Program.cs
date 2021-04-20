@@ -21,6 +21,7 @@ namespace GameEngineTK
 
 				//scripts.Add(new NoiseScript());
 
+				scripts.Add(new WorldScript());
 				scripts.Add(new PlayerScript());
 				scripts.Add(new CameraScript());
 				scripts.Add(new CursorScript());

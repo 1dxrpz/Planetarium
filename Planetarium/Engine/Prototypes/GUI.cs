@@ -11,8 +11,10 @@ namespace GameEngineTK.Engine
 {
 	public class GUI : IGameInstances
 	{
+		
 		private VisibleState visible;
 		private Layer parentLayer;
+		private string Name;
 		public bool isHover
 		{
 			get
@@ -62,12 +64,13 @@ namespace GameEngineTK.Engine
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return Name;
 			}
-
 			set
 			{
-				throw new NotImplementedException();
+				if (Parent.Objects.FindIndex(v => v.name == value) != -1)
+					throw new Exception($"Object with name {value} already exists.");
+				Name = value;
 			}
 		}
 
@@ -75,14 +78,14 @@ namespace GameEngineTK.Engine
 
 		public void Draw()
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public virtual void Update() { }
 
 		public void init()
 		{
-			throw new NotImplementedException();
+			
 		}
 		public void EnsureDefaults()
 		{

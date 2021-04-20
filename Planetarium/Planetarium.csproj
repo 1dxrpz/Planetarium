@@ -22,7 +22,6 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Engine\Prototypes\Enums\" />
     <Folder Include="Engine\Utils\Keyboard\" />
   </ItemGroup>
   <ItemGroup>
