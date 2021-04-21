@@ -36,7 +36,8 @@ namespace PerlinNoise.Filters
         {
             Colors = new List<ColorPair>();
         }
-        public NoiseField<Color> Filter(NoiseField<float> field)
+		NoiseField<Color> values;
+		public NoiseField<Color> Filter(NoiseField<float> field)
         {
             NoiseField<Color> result = new NoiseField<Color>(field.Width, field.Height);
 
@@ -59,10 +60,15 @@ namespace PerlinNoise.Filters
                     }
                 }
             }
+			values = result;
 
-            return result;
+			return result;
         }
-        public void AddColorPoint(float start, float end, Color color)
+		public NoiseField<Color> GetValues()
+		{
+			return values;
+		}
+		public void AddColorPoint(float start, float end, Color color)
         {
             ColorPair pair = new ColorPair(start, end, color);
 

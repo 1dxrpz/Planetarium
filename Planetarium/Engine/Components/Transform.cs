@@ -39,6 +39,13 @@ namespace GameEngineTK.Engine
 				height = value;
 			}
 		}
+		public Vector2 Size
+		{
+			get
+			{
+				return new Vector2(Width, Height);
+			}
+		}
 
 		public Vector2 Forward
 		{

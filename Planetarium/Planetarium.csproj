@@ -25,6 +25,12 @@
     <Folder Include="Engine\Utils\Keyboard\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\SharpNoise\LICENSE" Link="Engine\Utils\Noise\SharpNoise\LICENSE">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="MonoGame.Framework">
       <HintPath>..\..\..\..\Desktop\VelcroPhysics-master\VelcroPhysics\bin\Debug\net45\MonoGame.Framework.dll</HintPath>
     </Reference>

@@ -1,59 +1,110 @@
 ﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using GameEngineTK.Engine;
 using GameEngineTK.Engine.Components;
 using GameEngineTK.Engine.Prototypes.Interfaces;
+using GameEngineTK.Scripts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PerlinNoise;
 using PerlinNoise.Filters;
 using PerlinNoise.Transformers;
 using Planetarium.Engine.Utils.Noise.PerlinNoise.Filters;
+using SharpNoise;
+using SharpNoise.Modules;
 
 namespace Planetarium.Scripts
 {
 	class WorldScript : IScriptManager
 	{
-		PerlinNoiseGenerator NoiseGenerator;
 		NoiseField<float> perlinNoise;
-		Texture2D noiseTexture;
-		public void GenerateNoiseTexture()
+		
+		Perlin perlin;
+		public Texture2D GenerateNoiseTexture(int seed, int a, int b)
 		{
-			PerlinNoiseGenerator gen = new PerlinNoiseGenerator();
-			gen.OctaveCount = 7;
-			gen.Persistence = .5f;
-			gen.Interpolation = InterpolationAlgorithms.CosineInterpolation;
+			Texture2D noiseTexture = new Texture2D(ScriptManager.graphicsDevice, 100, 100);
+			perlin = new Perlin();
+			perlin.OctaveCount = 2;
+			perlin.Persistence = 10;
+			perlin.Quality = NoiseQuality.Standard;
+			perlin.Seed = seed;
 
-			perlinNoise = gen.GeneratePerlinNoise(1024, 1024);
+			Color[] data = new Color[100 * 100];
 
-			PixellatedColorFilter filter = new PixellatedColorFilter(10);
-			Texture2DTransformer transformer = new Texture2DTransformer(ScriptManager.graphicsDevice);
-
-			filter.AddColorPoint(0f, .2f, new Color(100, 100, 100));
-			filter.AddColorPoint(.2f, .4f, new Color(120, 120, 120));
-			filter.AddColorPoint(.4f, .6f, new Color(140, 140, 140));
-			filter.AddColorPoint(.6f, .8f, new Color(160, 160, 160));
-			filter.AddColorPoint(.8f, 1f, new Color(180, 180, 180));
-
-			noiseTexture = transformer.Transform(filter.Filter(perlinNoise));
+			for (int i = 0; i < 100; i++)
+			{
+				for (int n = 0; n < 100; n++)
+				{
+					var color = perlin.GetValue((double)n / 100 + a, (double)i / 100 + b, 0) > .1 ? Color.Gray : Color.White;
+					data[i * 100 + n] = color;
+				}
+			}
+			
+			noiseTexture.SetData(data);
+			return noiseTexture;
 		}
-		GameObject noise;
+		GameObject[] noise;
 		public void Start()
 		{
-			GenerateNoiseTexture();
+			GenerateNoiseTexture(1, 0, 0);
 
-			noise = new GameObject();
-			noise.GetComponent<Transform>().Width = 1024;
-			noise.GetComponent<Transform>().Height = 1024;
-			noise.AddComponent(new Sprite());
-			noise.GetComponent<Sprite>().Texture = noiseTexture;
+			noise = new GameObject[9]
+			{
+				new GameObject(),
+				new GameObject(),
+				new GameObject(),
+				new GameObject(),
+				new GameObject(),
+				new GameObject(),
+				new GameObject(),
+				new GameObject(),
+				new GameObject()
+			};
+
+			foreach (var item in noise)
+			{
+				item.GetComponent<Transform>().Width = 100;
+				item.GetComponent<Transform>().Height = 100;
+				item.GetComponent<Transform>().Position = new Vector2(0, 0);
+				item.AddComponent(new Sprite());
+				item.GetComponent<Sprite>().Texture = GenerateNoiseTexture(1, 0, 0);
+			}
 
 		}
-		/// <summary>
-		/// Method that updates script every tick
-		/// </summary>
+
+		bool lastChunk = false;
+		int prevx = 0;
+		int prevy = 0;
+		int sizex = 100;
+		int sizey = 100;
 		public void Update()
 		{
-			// Here's your Update code
+			Transform pt = PlayerScript.Player.GetComponent<Transform>();
+			if (prevx != (int)Math.Floor(pt.Position.X / sizex) * sizex ||
+				prevy != (int)Math.Floor(pt.Position.Y / sizey) * sizey)
+			{
+				prevx = (int)Math.Floor(pt.Position.X / sizex) * sizex;
+				prevy = (int)Math.Floor(pt.Position.Y / sizey) * sizey;
+
+				SetChunk(0, 0, 0);
+				SetChunk(1, sizex, 0);
+				SetChunk(2, -sizex, 0);
+				SetChunk(3, 0, sizey);
+				SetChunk(4, 0, -sizey);
+				SetChunk(5, sizex, sizey);
+				SetChunk(6, -sizex, sizey);
+				SetChunk(7, sizex, -sizey);
+				SetChunk(8, -sizex, -sizey);
+			}
+		}
+		async void SetChunk(int i, int sx, int sy)
+		{
+			await Task.Run(() =>
+			{
+				noise[i].GetComponent<Sprite>().Texture = GenerateNoiseTexture(1, (prevx + sx) / sizex, (prevy + sy) / sizey);
+				noise[i].GetComponent<Transform>().Position = new Vector2(prevx + sx, prevy + sy);
+			});
 		}
 	}
 }

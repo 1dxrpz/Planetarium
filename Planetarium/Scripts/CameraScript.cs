@@ -25,6 +25,9 @@ namespace GameEngineTK.Scripts
 		
 		public void Update()
 		{
+			Camera.Position = PlayerScript.Player.GetComponent<Transform>().Position -
+				new Vector2(1980 / 2, 1080 / 2) -
+				PlayerScript.Player.GetComponent<Transform>().Size / 2;
 			debug = ScriptManager.Services.GetService<Debug>();
 			debug.AddDebugLine($"FPS: {debug.FPS}");
 		}

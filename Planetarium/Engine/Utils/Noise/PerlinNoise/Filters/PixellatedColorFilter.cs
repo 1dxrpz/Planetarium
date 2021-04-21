@@ -39,6 +39,10 @@ namespace Planetarium.Engine.Utils.Noise.PerlinNoise.Filters
 			PixelSize = size;
 			Colors = new List<ColorPair>();
 		}
+		public List<ColorPair> GetValues()
+		{
+			return Colors;
+		}
 		public NoiseField<Color> Filter(NoiseField<float> field)
 		{
 			NoiseField<Color> result = new NoiseField<Color>(field.Width, field.Height);

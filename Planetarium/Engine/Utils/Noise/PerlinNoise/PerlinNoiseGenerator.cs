@@ -50,11 +50,11 @@ namespace PerlinNoise {
         /// </summary>
         public Random Random { get; set; }
 
-        public PerlinNoiseGenerator() {
+        public PerlinNoiseGenerator(int seed) {
             OctaveCount = 4;
             Persistence = 0.5f;
             Interpolation = InterpolationAlgorithms.LinearInterpolation;
-            Random = new Random();
+			Random = new Random(seed);
         }
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace PerlinNoise {
         /// <param name="width">Width of the field</param>
         /// <param name="height">Height of the field</param>
         /// <returns>A new field of white noise</returns>
-        public NoiseField<float> GenerateWhiteNoise(int width, int height) {
-            return GenerateWhiteNoise(width, height, Random);
+        public NoiseField<float> GenerateWhiteNoise(int width, int height, int x_start_coord, int y_start_coord) {
+            return GenerateWhiteNoise(width, height, Random, x_start_coord, y_start_coord);
         }
 
         /// <summary>
@@ -74,17 +74,17 @@ namespace PerlinNoise {
         /// <param name="height">Height of the field</param>
         /// <param name="random">Random number generator to use.  Can be pre-seeded.</param>
         /// <returns></returns>
-        public NoiseField<float> GenerateWhiteNoise(int width, int height, Random random) {
+        public NoiseField<float> GenerateWhiteNoise(int width, int height, Random random, int x_start_coord, int y_start_coord) {
             NoiseField<float> field = new NoiseField<float>(width, height);
-
+			
             for(int x = 0; x < width; x++) {
                 for(int y = 0; y < height; y++) {
                     field.Field[x, y] = (float)random.NextDouble() % 1;
                 }
             }
 
-            return field;
-        }
+			return field;
+		}
 
         /// <summary>
         /// Smooths a noise field.
@@ -167,8 +167,8 @@ namespace PerlinNoise {
         /// <param name="octaveCount"></param>
         /// <param name="persistence"></param>
         /// <returns></returns>
-        public NoiseField<float> GeneratePerlinNoise(int width, int height) {
-            NoiseField<float> whiteNoise = GenerateWhiteNoise(width, height);
+        public NoiseField<float> GeneratePerlinNoise(int width, int height, int x_start_coord, int y_start_coord) {
+            NoiseField<float> whiteNoise = GenerateWhiteNoise(width, height, x_start_coord, y_start_coord);
             return PerlinNoiseField(whiteNoise);
         }
     }
