@@ -68,12 +68,12 @@ namespace GameEngineTK.Engine
 
 			text = "";
 			
-
+			/*
 			foreach (string line in DebugLines)
 			{
 				text += "\n" + line;
 			}
-
+			*/
 			DebugLines = new List<string>();
 		}
 		public void AddDebugLine(string LineMessage)
